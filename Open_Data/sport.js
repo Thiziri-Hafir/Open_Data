@@ -8,10 +8,6 @@ module.exports = {
         axiosCall(function(data){
                 resolve(data);
             });
-    },
-    sport_sync : function (){
-        return axios
-          .get('https://equipements.sports.gouv.fr/api/records/1.0/search/?dataset=data-es&q=&facet=famille&facet=caract24&facet=caract25&facet=caract74&facet=caract33&facet=caract156&facet=caract159&facet=caract167&facet=caract168&facet=caract169&facet=atlas&facet=nom_region&facet=nom_dept&facet=coordonnees_gps_lat_lon&geofilter.distance=')
     }
 };
 
@@ -36,5 +32,6 @@ async function axiosCall(resolve,long, lat,r){
 
                 });
                 resolve(data);
+                
               });
 }

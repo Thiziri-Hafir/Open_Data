@@ -18,6 +18,7 @@ module.exports = {
 
 async function axiosCall(resolve,long, lat,r){
 	const url = '/api/records/1.0/search/?dataset=base-des-lieux-et-des-equipements-culturels&q=&facet=type_equipement_ou_lieu&facet=label_et_appellation&facet=domaine&facet=sous_domaines&facet=departement&facet=adresse_postale&facet=nom&facet=coordonnees_gps_lat_lon&geofilter.distance='
+	console.log(long+lat+r);
 	await axios
 		  .get(url+long+'%2C'+lat+'%2C'+r)
 		  .then(res => {

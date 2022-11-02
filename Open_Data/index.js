@@ -224,11 +224,11 @@ app.get('/classementslycees', function(req, response){
  *
  */
 
-app.get('/chomage', function(req, response){
+/* app.get('/chomage', function(req, response){
 	response.send(chomage.chomage());
 })
 
-
+ */
 /**
  * @swagger
  * /join:
@@ -349,14 +349,14 @@ const axios = require('axios')
 const express = require('express')
 const request = require('request')
 const fs = require('fs')
-const XLSX = require('xlsx');
-const puppeteer = require('puppeteer')
-const scrap = require('../Integration_donnees-main/scrap')
+/* const XLSX = require('xlsx');
+const puppeteer = require('puppeteer') */
+/* const scrap = require('../Integration_donnees-main/scrap') */
 const culture = require('./culture')
 const sport = require('./sport')
-const chomage = require('../Integration_donnees-main/chomage')
+/* const chomage = require('../Integration_donnees-main/chomage')
 const dep_reg = require('../Integration_donnees-main/dep_reg')
-const reg_code = require('../Integration_donnees-main/reg_code')
+const reg_code = require('../Integration_donnees-main/reg_code') */
 
 
 
@@ -384,18 +384,82 @@ app.use('/api-docs',swaggerUi.serve,swaggerUi.setup(swaggerDocs));
 
 const PORT = process.env.PORT || 3000;
 
-
 const long = 47.21151478387656
 const lat = -1.547461758200557
 const r = 3000
 
-app.get('/culture_async', function(req, response){
-	culture.culture_async(function(data,long,lat,r) {response.send(data)});
+app.get('/culture_async/:long/:lat/:r', function(req, response){
+	const long = req.params.long
+	const lat = req.params.lat
+	const r = req.params.r
+	
+	
+	var url = 'https://data.culture.gouv.fr/api/records/1.0/search/?dataset=base-des-lieux-et-des-equipements-culturels&q=&facet=type_equipement_ou_lieu&facet=label_et_appellation&facet=domaine&facet=sous_domaines&facet=departement&facet=adresse_postale&facet=nom&facet=coordonnees_gps_lat_lon&geofilter.distance='
+	
+
+    url = url+""+long+'%2C'+""+lat+'%2C'+"+"+r
+
+	/* url = "/api/records/1.0/search/?dataset=base-des-lieux-et-des-equipements-culturels&q=&facet=type_equipement_ou_lieu&facet=label_et_appellation&facet=region&facet=domaine&facet=sous_domaines&facet=departement&geofilter.distance=47.21151478387656%2C-1.547461758200557%2C+1000 "
+ */
+	console.log("url: ",url);
+	axios
+          .get(url)
+          .then(res => {
+            let data = [];
+            res.data['records'].forEach(element =>{
+                    let temp_dic = {}
+                    temp_dic['type'] = element['fields']['carac168'];
+                    temp_dic['type_equipement'] = element['fields']['typeequipement']
+                    temp_dic['nom_installation'] = element['fields']['nominstallation'];
+                    temp_dic['famille'] = element['fields']['famille'];
+                    temp_dic['departement'] = element['fields']['nom_dept'];
+                    temp_dic['code_postale'] = element['fields']['codepostal'];
+                    temp_dic['adresse'] = element['fields']['adresse'];
+
+                    data.push(temp_dic)
+
+                });
+                response.send(data);
+                
+              });
+
+
 })
 
-app.get('/sport_async', function(req, response){
-	sport.sport_async(function(data,long,lat,r) {response.send(data)});
+app.get('/sport_async/:long/:lat/:r', function(req, response){
+
+	const long = req.params.long
+	const lat = req.params.lat
+	const r = req.params.r
+	
+	
+	var url = "https://equipements.sports.gouv.fr/api/records/1.0/search/?dataset=data-es&q=&facet=famille&facet=caract24&facet=caract25&facet=caract74&facet=caract33&facet=caract156&facet=caract159&facet=caract167&facet=caract168&facet=caract169&facet=atlas&facet=nom_region&facet=nom_dept&facet=coordonnees_gps_lat_lon&geofilter.distance="	
+
+    url = url+""+long+'%2C'+""+lat+'%2C'+"+"+r
+
+	axios
+          .get(url)
+          .then(res => {
+            let data = [];
+            res.data['records'].forEach(element =>{
+                    let temp_dic = {}
+                    temp_dic['type'] = element['fields']['carac168'];
+                    temp_dic['type_equipement'] = element['fields']['typeequipement']
+                    temp_dic['nom_installation'] = element['fields']['nominstallation'];
+                    temp_dic['famille'] = element['fields']['famille'];
+                    temp_dic['departement'] = element['fields']['nom_dept'];
+                    temp_dic['code_postale'] = element['fields']['codepostal'];
+                    temp_dic['adresse'] = element['fields']['adresse'];
+
+                    data.push(temp_dic)
+
+                });
+                response.send(data);
+                
+              });
+
 })
+
 
 
 app.listen(PORT, function(){
