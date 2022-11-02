@@ -1,0 +1,21 @@
+<!doctype html>
+  <html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <title>TITRE</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://requirejs.org/docs/release/2.3.6/minified/require.js"></script>
+    <script src="script.js"></script>
+  </head>
+  <body onload="csvJSON('villes-france-codes-postaux.xlsb')"> 
+   <div class="topnav">
+    <input id="ville" type="text" placeholder="Nom de la ville">
+    <button onclick="search()">Rechercher</button>
+    <div>
+      <input type="range" id="radius" name="radius"
+      min="1" max="50" step="1">
+      <label for="radius">Range</label>
+    </div>
+  </div>
+</body>
+</html>
