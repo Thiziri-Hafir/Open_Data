@@ -407,16 +407,16 @@ app.get('/culture_async/:long/:lat/:r', function(req, response){
           .then(res => {
             let data = [];
             res.data['records'].forEach(element =>{
-                    let temp_dic = {}
-                    temp_dic['type'] = element['fields']['carac168'];
-                    temp_dic['type_equipement'] = element['fields']['typeequipement']
-                    temp_dic['nom_installation'] = element['fields']['nominstallation'];
-                    temp_dic['famille'] = element['fields']['famille'];
-                    temp_dic['departement'] = element['fields']['nom_dept'];
-                    temp_dic['code_postale'] = element['fields']['codepostal'];
-                    temp_dic['adresse'] = element['fields']['adresse'];
+				let temp_dic = {}
+				temp_dic['nom'] = element['fields']['nom'];
+				temp_dic['type'] = element['fields']['type_equipement_ou_lieu']
+				temp_dic['label_et_appellation'] = element['fields']['label_et_appellation'];
+				temp_dic['domaine'] = element['fields']['domaine'];
+				temp_dic['s_domaine'] = element['fields']['sous_domaine'];
+				temp_dic['departement'] = element['fields']['departement'];
+				temp_dic['adresse_postale'] = element['fields']['adresse_postale'];
 
-                    data.push(temp_dic)
+				data.push(temp_dic)
 
                 });
                 response.send(data);
