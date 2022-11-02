@@ -1,4 +1,4 @@
-"use strict";
+/* "use strict";
 
 // const express= require('express');
 
@@ -50,23 +50,9 @@ app.use('/api-docs',swaggerUi.serve,swaggerUi.setup(swaggerDocs));
 
 const PORT = process.env.PORT || 3000;
 
+ */
 
-
-
-
-
-try {
-  if (!fs.existsSync('./data/chomage.xls')) {
-  	console.log('XLS DOWNLOAD')
-    request('https://www.insee.fr/fr/statistiques/fichier/2012804/sl_etc_2021T4.xls', {encoding: null}, function(err, res, data) {
-	    if(err || res.statusCode !== 200) return;
-	    fs.writeFileSync('./data/chomage.xls', data);
-	});
-  }
-} catch(err) {
-  console.error(err)
-}
-
+/* 
 try {
   if (!fs.existsSync('./data/lycee.json')) {
   	scrap.scrap(function(data){
@@ -84,7 +70,8 @@ try {
 } catch(err) {
   console.error(err)
 }
-
+ */
+/* 
 try {
   if (!fs.existsSync('./data/dep_reg.json')) {
   	dep_reg.dep_reg(function(data){
@@ -102,8 +89,8 @@ try {
 } catch(err) {
   console.error(err)
 }
-
-try {
+ */
+/* try {
   if (!fs.existsSync('./data/reg_code.json')) {
   	reg_code.reg_code(function(data){
   		const return_json = JSON.stringify(data);
@@ -120,16 +107,16 @@ try {
 } catch(err) {
   console.error(err)
 }
+ */
 
 
 
 
-
-app.get('/', function(req, response){
+/* app.get('/', function(req, response){
 	console.log('hello');
 	response.send('bienvenue sur mon serveur');
 })
-
+ */
 
 /**
  * @swagger
@@ -142,7 +129,7 @@ app.get('/', function(req, response){
  *
  */
 
-app.get('/dep_reg', function(req, response){
+/* app.get('/dep_reg', function(req, response){
 	fs.readFile('./data/dep_reg.json', 'utf-8', (err, data) => {
 	    if (err) {
 	        throw err;
@@ -159,7 +146,7 @@ app.get('/dep_reg', function(req, response){
 
 	});
 
-
+ */
 
   /**
    * @swagger
@@ -172,7 +159,7 @@ app.get('/dep_reg', function(req, response){
    *
    */
 
-
+/* 
 	app.get('/reg_code', function(req, response){
 		fs.readFile('./data/reg_code.json', 'utf-8', (err, data) => {
 		    if (err) {
@@ -184,11 +171,8 @@ app.get('/dep_reg', function(req, response){
 		    // print JSON object
 		    response.send(reg_code);
 		});
-
-
-
-
-		});
+	});
+	 */
 
     /**
      * @swagger
@@ -200,7 +184,7 @@ app.get('/dep_reg', function(req, response){
      *         description: Success
      *
      */
-
+/* 
 app.get('/classementslycees', function(req, response){
 	fs.readFile('./data/lycee.json', 'utf-8', (err, data) => {
 	    if (err) {
@@ -212,7 +196,7 @@ app.get('/classementslycees', function(req, response){
 	    // print JSON object
 	    response.send(allLycee);
 	});
-})
+}) */
 
 /**
  * @swagger
@@ -225,10 +209,10 @@ app.get('/classementslycees', function(req, response){
  *
  */
 
-app.get('/aide_territoire', function(req, response){
+/* app.get('/aide_territoire', function(req, response){
 	aide.aide_async(function(data) {response.send(data)});
 })
-
+ */
 /**
  * @swagger
  * /chomage:
@@ -255,7 +239,7 @@ app.get('/chomage', function(req, response){
  *         description: Success
  *
  */
-
+/* 
 app.get('/join', function(req, response){
     var chomage_data = chomage.chomage();
     Promise.all([aide.aide_sync()]).then((values) => {
@@ -341,6 +325,77 @@ app.get('/join', function(req, response){
 
 })
 
+ */
+
+/* app.listen(PORT, function(){
+	console.log('Hello :'+ PORT);
+})
+ */
+"use strict";
+
+// const express= require('express');
+
+// import https from "https";
+// import fs from "fs";
+// import path from "path";
+// import xlsx from "node-xlsx";
+
+// import fetch from 'node-fetch';
+// import axios from 'axios';
+// import express from 'express';
+
+
+const axios = require('axios')
+const express = require('express')
+const request = require('request')
+const fs = require('fs')
+const XLSX = require('xlsx');
+const puppeteer = require('puppeteer')
+const scrap = require('../Integration_donnees-main/scrap')
+const culture = require('./culture')
+const sport = require('./sport')
+const chomage = require('../Integration_donnees-main/chomage')
+const dep_reg = require('../Integration_donnees-main/dep_reg')
+const reg_code = require('../Integration_donnees-main/reg_code')
+
+
+
+const swaggerUi = require('swagger-ui-express')
+const swaggerJsDoc = require('swagger-jsdoc')
+
+const app = express();
+
+const swaggerOptions = {
+    swaggerDefinition: {
+        info: {
+            title: "Documentation de l'API ",
+            version: "1.0.0",
+            description: "Documentation des différentes routes de l'API",
+        }
+    },
+    apis: ['index.js'],
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+
+
+app.use('/api-docs',swaggerUi.serve,swaggerUi.setup(swaggerDocs));
+
+
+const PORT = process.env.PORT || 3000;
+
+
+const long = 47.21151478387656
+const lat = -1.547461758200557
+const r = 3000
+
+app.get('/culture_async', function(req, response){
+	culture.culture_async(function(data,long,lat,r) {response.send(data)});
+})
+
+app.get('/sport_async', function(req, response){
+	sport.sport_async(function(data,long,lat,r) {response.send(data)});
+})
 
 
 app.listen(PORT, function(){
