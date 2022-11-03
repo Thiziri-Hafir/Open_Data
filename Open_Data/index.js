@@ -410,7 +410,10 @@ app.get('/latlong_from_ville/:ville/:r', function(req, response){
 
 	console.log(jacksonville);
 	
-	var fjsv = jacksonville.filter(Ville == ville)
+	var fjsv = jacksonville.filter(function (result){
+        return result.nom == ville;
+    });
+    console.log(fjsv)
 	culture_sport_async(fjsv.lat,fjsv.long,r).then(res =>{ response.send(data)});
 
 })
