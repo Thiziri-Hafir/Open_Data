@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>TP4</title>
+		<link rel="stylesheet" href="leaflet/leaflet.css" />
+		<script src="leaflet/leaflet.js"></script>
+		<script src="jquery-3.6.0.min.js"></script> 
+
+		<meta charset="UTF-8">
+
+		<link rel="stylesheet" href="Leaflet.markercluster/dist/MarkerCluster.css" />
+		<link rel="stylesheet" href="Leaflet.markercluster/dist/MarkerCluster.Default.css" />
+		<script src="Leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+
+		<style>
+
+		#divmap {
+
+	background-color: blue;
+	height: 500px;
+	width: 900px;
+	border:3px;
+	border-color: gray;
+		}
+
+</style>
+
+
+	</head>
+	<body>
+
+		<div id="divmap"  >
+			
+   			 
+   		</div>
+   		<script type="text/javascript">
+   			var map = L.map('divmap'); 
+			map.setView([42.3600825,-71.0588801], 12);
+
+			/*1ere carte
+			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+			{ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' } )
+			.addTo(map);
+			*/
+
+			L.tileLayer('http://tiles.mapc.org/basemap/{z}/{x}/{y}.png',
+			{ attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>,Data by <a href="http://mass.gov/mgis">MassGIS</a> ',
+			maxZoom: 17,
+			minZoom: 9
+			})
+			.addTo(map);
+
+			/*Ajout couche piste cyclabe
+			L.tileLayer(
+			'http://tiles.mapc.org/trailmap-onroad/{z}/{x}/{y}.png',
+				{
+					maxZoom: 17,
+					minZoom: 9
+				}).addTo(map);
+				*/
+			
+			//ajout point rats
+
+			$.ajax({
+			url: "rodents.geojson", 
+			dataType: "json", 
+				success: function(rodents){
+				console.log(rodents);
+
+				var ratIcon = L.icon({
+				//iconUrl: 'rat.gif',
+				iconUrl: 'rat.png',
+				iconSize: [25,25] });
+				var ratLayer=L.geoJson(rodents,{ pointToLayer: function(feature,latlng){
+					var marker = L.marker(latlng,{icon: ratIcon});
+					marker.bindPopup(feature.properties.Location+ "  "+feature.properties.OPEN_DT);
+					return marker;
+				}})
+				//.addTo(map);
+
+				var clusters = L.markerClusterGroup();
+				clusters.addLayer(ratLayer);
+				map.addLayer(clusters);
+
+			}
+			});
+
+
+			//Ajout Polygones
+			$.ajax({
+			url: "neighborhoods.geojson", 
+			dataType: "json", 
+				success: function(neighborhoods){
+				console.log(neighborhoods);
+				L.geoJson(neighborhoods,
+					{
+						style: function(feature){
+							var fc;
+						if ( feature.properties.density > 80 )
+							fc = "#006837";
+						else if ( feature.properties.density > 40 )
+							fc = "#31a354";
+						else if ( feature.properties.density > 20 )
+							fc = "#78c679";
+						else if ( feature.properties.density > 10 )
+							fc = "#c2e699";
+						else if ( feature.properties.density > 0 )
+							fc = "#ffffcc";
+						else
+							fc = "#f7f7f7";
+
+						return { 
+						color: "#999999", 
+						weight: 1,
+						fillColor: fc, 
+						fillOpacity: 0.6 
+					};
+				},
+				onEachFeature: function( feature, layer ){
+					layer.bindPopup("<strong>"+feature.properties.Name+"</strong> <br/>" +feature.properties.density + " rats par mètrecarré" )
+				}
+
+				}).addTo(map);
+			}
+
+
+			});
+
+			
+			
+
+   		</script>
+
+   		
+	
+	</body>
+</html>
