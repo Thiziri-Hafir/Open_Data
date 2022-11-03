@@ -403,18 +403,18 @@ app.get('/latlong_from_ville/:ville/:r', function(req, response){
 	const ville = req.params.ville
 	const r = req.params.r
 
-	console.log(ville+""+r);
+	//console.log(ville+""+r);
 
 	let jacksonville = fs.readFileSync("loc_ville.json");
 	jacksonville = JSON.parse(jacksonville);
 
-	console.log(jacksonville);
+	//console.log(jacksonville);
 	
 	var fjsv = jacksonville.filter(function (result){
         return result.nom == ville;
     });
-    console.log(fjsv)
-	culture_sport_async(fjsv.lat,fjsv.long,r).then(res =>{ response.send(data)});
+    
+	culture_sport_async(fjsv[0].lat,fjsv[0].long,r).then(res =>{ response.send(res)});
 
 })
 
@@ -422,12 +422,12 @@ function culture_sport_async(lat,long, r){
 	var url = 'https://data.culture.gouv.fr/api/records/1.0/search/?dataset=base-des-lieux-et-des-equipements-culturels&q=&facet=type_equipement_ou_lieu&facet=label_et_appellation&facet=domaine&facet=sous_domaines&facet=departement&facet=adresse_postale&facet=nom&facet=coordonnees_gps_lat_lon&geofilter.distance='
 	
 
-    url = url+""+long+'%2C'+""+lat+'%2C'+"+"+r
+    url = url+""+lat+'%2C'+""+long+'%2C'+"+"+r
 
 	/* url = "/api/records/1.0/search/?dataset=base-des-lieux-et-des-equipements-culturels&q=&facet=type_equipement_ou_lieu&facet=label_et_appellation&facet=region&facet=domaine&facet=sous_domaines&facet=departement&geofilter.distance=47.21151478387656%2C-1.547461758200557%2C+1000 "
  */
 	console.log("url: ",url);
-	culture = axios
+	var culture = axios
           .get(url)
           .then(res => {
             let data = [];
@@ -451,7 +451,7 @@ function culture_sport_async(lat,long, r){
 
 	url = url+""+long+'%2C'+""+lat+'%2C'+"+"+r
 
-	sport = axios
+	var sport = axios
 		.get(url)
 		.then(res => {
 			let data = [];
