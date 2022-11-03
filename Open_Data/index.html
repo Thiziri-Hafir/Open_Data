@@ -21,6 +21,18 @@
 </html>
 
 <script>
+  function search() {
+    var ville = document.getElementById("ville").value 
+
+    const url = 'localhost:3000/latlong_from_ville/'+''+ville+'/'+ document.getElementById("radius").value
+
+    console.log(url);
+
+    var cult = fetch(url)
+                    .then(response => response.json());
+
+  }
+
   var slider = document.getElementById("radius");
   var output = document.getElementById("demo");
   output.innerHTML = slider.value; // Display the default slider value
