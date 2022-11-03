@@ -357,6 +357,7 @@ var cors = require('cors');
 const swaggerUi = require('swagger-ui-express')
 const swaggerJsDoc = require('swagger-jsdoc')
 
+const uri = "mongodb+srv://opendata:azertymiashs@open-data.4at36qz.mongodb.net/?retryWrites=true&w=majority";
 
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
@@ -467,6 +468,37 @@ app.get('/home', function(req, response){
         })
 })
 
+app.get('/mongodb', function(req, response){
+
+	const { MongoClient } = require('mongodb');
+	const uri = "mongodb+srv://opendata:azertymiashs@open-data.4at36qz.mongodb.net/?retryWrites=true&w=majority";
+	const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+	console.log('hello');
+	client.connect(err => {
+	  const collection = client.db("sample_airbnb").collection("listingsAndReviews");
+	  console.log(collection)
+	  // const review = collection.findOne({'_id':'10006546'})
+	  const review = collection.findOne()
+	  console.log(review)
+	  // perform actions on the collection object
+	  console.log('close')
+	  client.close()
+	  // setTimeout(() => {client.close()}, 1500)
+	});
+
+})
+
+app.get("/mongodb2", cors(), function (request, response) {
+    mongodb.MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, client) {
+        if (err) console.log("error", err);
+        else {
+            client.db("sample_airbnb").collection("listingsAndReviews").findOne(function (err, items) {
+                if (err) throw err;
+                response.send(items);
+            });
+        }
+    });
+});
 
 app.listen(PORT, function(){
 	console.log('Hello :'+ PORT);
