@@ -331,37 +331,50 @@ app.get('/join', function(req, response){
 	console.log('Hello :'+ PORT);
 })
  */
-"use strict";
+
 
 // const express= require('express');
 
 // import https from "https";
-// import fs from "fs";
-// import path from "path";
+import fs from "fs";
+import path from "path";
 // import xlsx from "node-xlsx";
 
-// import fetch from 'node-fetch';
-// import axios from 'axios';
-// import express from 'express';
+import fetch from 'node-fetch';
+import axios from 'axios';
+import express from 'express';
+import cors from 'cors';
+import mongodb from 'mongodb';
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUi from 'swagger-ui-express';
+import bodyParser from "body-parser";
 
 
-const axios = require('axios')
+/* const axios = require('axios')
 const express = require('express')
 const request = require('request')
 const fs = require('fs')
-
-const app = express();
 var cors = require('cors');
-
-
+const mongodb = require('mongodb');
 const swaggerUi = require('swagger-ui-express')
 const swaggerJsDoc = require('swagger-jsdoc')
-
-
 const bodyParser = require('body-parser');
+
+
+*/
+
+
+const app = express();
+
+
+
+
+
+
+
 app.use(bodyParser.json());
 
-const mongodb = require('mongodb');
+
 /* const urimongo = require("./resources/secret/databaseconfig.js").url; // TODO
  */
 
@@ -377,7 +390,7 @@ const swaggerOptions = {
     apis: ['index.js'],
 };
 
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
+const swaggerDocs = swaggerJSDoc(swaggerOptions);
 
 
 app.use('/api-docs',swaggerUi.serve,swaggerUi.setup(swaggerDocs));
@@ -392,9 +405,9 @@ app.get('/latlong_from_ville/:ville/:r', function(req, response){
 
 	console.log(ville+""+r);
 
+	let jacksonville = fs.readFileSync("loc_ville.json");
+	jacksonville = JSON.parse(jacksonville);
 
-	var jacksonville = getJSON('https://github.com/Thiziri-Hafir/Open_Data/raw/main/Open_Data/villes-france-codes-postaux.json')
-	
 	console.log(jacksonville);
 	
 	var fjsv = jacksonville.filter(Ville == ville)
