@@ -7,6 +7,7 @@
     <script src="https://requirejs.org/docs/release/2.3.6/minified/require.js"></script>
     <script src="script.js"></script>
   </head>
+  
   <body onload="csvJSON('villes-france-codes-postaux.xlsx')"> 
    <div class="topnav">
     <input id="ville" type="text" placeholder="Nom de la ville">
@@ -19,3 +20,15 @@
   </div>
 </body>
 </html>
+
+<script>
+  var slider = document.getElementById("radius");
+  var output = document.getElementById("demo");
+  output.innerHTML = slider.value; // Display the default slider value
+
+// Update the current slider value (each time you drag the slider handle)
+  slider.oninput = function() {
+  output.innerHTML = this.value;
+} 
+
+</script>

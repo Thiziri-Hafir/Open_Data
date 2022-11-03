@@ -350,7 +350,7 @@ const express = require('express')
 const request = require('request')
 const fs = require('fs')
 
-
+const app = express();
 var cors = require('cors');
 
 
@@ -362,10 +362,9 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 
 const mongodb = require('mongodb');
-const urimongo = require("./resources/secret/databaseconfig.js").url; // TODO
+/* const urimongo = require("./resources/secret/databaseconfig.js").url; // TODO
+ */
 
-
-const app = express();
 
 const swaggerOptions = {
     swaggerDefinition: {
@@ -459,6 +458,16 @@ app.get('/sport_async/:long/:lat/:r', function(req, response){
 
 })
 
+app.get('/home', function(req, response){
+	fs.readFile("/index.html")
+        .then(contents => {
+            response.setHeader("Content-Type", "text/html");
+            response.writeHead(200);
+            response.end(contents);
+        })
+	
+
+})
 
 
 app.listen(PORT, function(){
@@ -525,12 +534,3 @@ function csvJSON(csv){
 }
 
 
-
-var slider = document.getElementById("radius");
-var output = document.getElementById("demo");
-output.innerHTML = slider.value; // Display the default slider value
-
-// Update the current slider value (each time you drag the slider handle)
-slider.oninput = function() {
-  output.innerHTML = this.value;
-} 
