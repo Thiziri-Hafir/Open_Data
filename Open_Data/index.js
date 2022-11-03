@@ -465,8 +465,6 @@ app.get('/home', function(req, response){
             response.writeHead(200);
             response.end(contents);
         })
-	
-
 })
 
 
