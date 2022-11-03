@@ -349,19 +349,21 @@ const axios = require('axios')
 const express = require('express')
 const request = require('request')
 const fs = require('fs')
-/* const XLSX = require('xlsx');
-const puppeteer = require('puppeteer') */
-/* const scrap = require('../Integration_donnees-main/scrap') */
-/* const culture = require('./culture')
-const sport = require('./sport') */
-/* const chomage = require('../Integration_donnees-main/chomage')
-const dep_reg = require('../Integration_donnees-main/dep_reg')
-const reg_code = require('../Integration_donnees-main/reg_code') */
 
+
+var cors = require('cors');
 
 
 const swaggerUi = require('swagger-ui-express')
 const swaggerJsDoc = require('swagger-jsdoc')
+
+
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+
+const mongodb = require('mongodb');
+const urimongo = require("./resources/secret/databaseconfig.js").url; // TODO
+
 
 const app = express();
 
@@ -384,9 +386,6 @@ app.use('/api-docs',swaggerUi.serve,swaggerUi.setup(swaggerDocs));
 
 const PORT = process.env.PORT || 3000;
 
-const long = 47.21151478387656
-const lat = -1.547461758200557
-const r = 3000
 
 app.get('/culture_async/:long/:lat/:r', function(req, response){
 	const long = req.params.long
@@ -408,6 +407,7 @@ app.get('/culture_async/:long/:lat/:r', function(req, response){
             let data = [];
             res.data['records'].forEach(element =>{
 				let temp_dic = {}
+				temp_dic['id'] = element['fields']['Code_Insee_EPCI'];
 				temp_dic['nom'] = element['fields']['nom'];
 				temp_dic['type'] = element['fields']['type_equipement_ou_lieu']
 				temp_dic['label_et_appellation'] = element['fields']['label_et_appellation'];
@@ -415,7 +415,6 @@ app.get('/culture_async/:long/:lat/:r', function(req, response){
 				temp_dic['s_domaine'] = element['fields']['sous_domaine'];
 				temp_dic['departement'] = element['fields']['departement'];
 				temp_dic['adresse_postale'] = element['fields']['adresse_postale'];
-
 				data.push(temp_dic)
 
                 });
@@ -465,3 +464,73 @@ app.get('/sport_async/:long/:lat/:r', function(req, response){
 app.listen(PORT, function(){
 	console.log('Hello :'+ PORT);
 })
+
+
+var ville =  function search() {return document.getElementById("ville") }
+
+
+function postPoll(idwin, idloose) {
+    var body = {win:idwin, loose:idloose};
+    var urlpoll = "/poll";
+    fetch(urlpoll, {  method:'POST', 
+                      body: JSON.stringify(body)  ,
+                      headers:{'Content-Type': 'application/json'}, 
+                      mode:"cors", 
+                      cache:'default'}).then(
+        function(response){ 
+            window.location.reload();
+        })
+}
+
+
+app.post("/poll", cors(), function (request, response) {
+    //récupérer les données de la requête
+    var body = request.body;
+    //pousser en base de données
+    mongodb.MongoClient.connect(urimongo, { useUnifiedTopology: true }, function (err, client) {
+        if (err) console.log("error", err);
+        else {
+            try {client.db("otakuotake").collection("poll").insertOne(body);}
+             catch(error) {
+                throw err;
+             }
+        }
+    }); 
+})
+
+//var csv is the CSV file with headers
+function csvJSON(csv){
+
+  var lines=csv.split("\n");
+
+  var result = [];
+
+  var headers=lines[0].split(",");
+
+  for(var i=1;i<lines.length;i++){
+
+    var obj = {};
+    var currentline=lines[i].split(",");
+
+    for(var j=0;j<headers.length;j++){
+      obj[headers[j]] = currentline[j];
+    }
+
+    result.push(obj);
+
+  }
+  
+  //return result; //JavaScript object
+  return JSON.stringify(result); //JSON
+}
+
+
+
+var slider = document.getElementById("radius");
+var output = document.getElementById("demo");
+output.innerHTML = slider.value; // Display the default slider value
+
+// Update the current slider value (each time you drag the slider handle)
+slider.oninput = function() {
+  output.innerHTML = this.value;
+} 
