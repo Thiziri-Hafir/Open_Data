@@ -395,6 +395,7 @@ const swaggerDocs = swaggerJSDoc(swaggerOptions);
 
 app.use('/api-docs',swaggerUi.serve,swaggerUi.setup(swaggerDocs));
 
+app.use(express.static('app'));
 
 const PORT = process.env.PORT || 3000;
 
@@ -555,7 +556,7 @@ app.get('/sport_async/:long/:lat/:r', function(req, response){
 
 
 app.get('/home', function(req, response){
-	fs.promises.readFile("index.html")
+	fs.promises.readFile("app/templates/index2.html")
         .then(contents => {
             response.setHeader("Content-Type", "text/html");
             response.writeHead(200);

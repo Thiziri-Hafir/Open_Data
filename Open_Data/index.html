@@ -35,18 +35,25 @@
               .then(response => response.json()
               .then(data => {
                 console.log(data)
+                contentStr = "";
+
+                data.forEach(function(o){
+                    contentStr += "<div>"+ o.nom +", adresse :  "+ o.adresse_postale +"</div>";
+                });
+                document.getElementById('container').innerHTML = contentStr; 
+                console.log(points);
               }))
               
 
     
-    /* contentStr = "";
+    contentStr = "";
 
     points.forEach(function(o){
         contentStr += "<div>"+ o.nom +", adresse :  "+ o.adresse_postale +"</div>";
     });
     document.getElementById('container').innerHTML = contentStr; 
     console.log(points);
- */
+ 
   }
 
   var slider = document.getElementById("radius");
