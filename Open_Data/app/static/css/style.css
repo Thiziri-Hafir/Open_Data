@@ -28,4 +28,10 @@ body {
 .mt-200 {
     margin-top: 200px
 }
-}
+
+.map-wrapper {
+    position: relative;
+    height: 100%;
+    width: 100%;
+  }
+  

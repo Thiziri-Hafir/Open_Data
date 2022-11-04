@@ -331,37 +331,50 @@ app.get('/join', function(req, response){
 	console.log('Hello :'+ PORT);
 })
  */
-"use strict";
+
 
 // const express= require('express');
 
 // import https from "https";
-// import fs from "fs";
-// import path from "path";
+import fs from "fs";
+import path from "path";
 // import xlsx from "node-xlsx";
 
-// import fetch from 'node-fetch';
-// import axios from 'axios';
-// import express from 'express';
+import fetch from 'node-fetch';
+import axios from 'axios';
+import express from 'express';
+import cors from 'cors';
+import mongodb from 'mongodb';
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUi from 'swagger-ui-express';
+import bodyParser from "body-parser";
 
 
-const axios = require('axios')
+/* const axios = require('axios')
 const express = require('express')
 const request = require('request')
 const fs = require('fs')
-
-const app = express();
 var cors = require('cors');
-
-
+const mongodb = require('mongodb');
 const swaggerUi = require('swagger-ui-express')
 const swaggerJsDoc = require('swagger-jsdoc')
-
-
 const bodyParser = require('body-parser');
+
+
+*/
+
+
+const app = express();
+
+
+
+
+
+
+
 app.use(bodyParser.json());
 
-const mongodb = require('mongodb');
+
 /* const urimongo = require("./resources/secret/databaseconfig.js").url; // TODO
  */
 
@@ -377,7 +390,7 @@ const swaggerOptions = {
     apis: ['index.js'],
 };
 
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
+const swaggerDocs = swaggerJSDoc(swaggerOptions);
 
 
 app.use('/api-docs',swaggerUi.serve,swaggerUi.setup(swaggerDocs));
@@ -390,15 +403,18 @@ app.get('/latlong_from_ville/:ville/:r', function(req, response){
 	const ville = req.params.ville
 	const r = req.params.r
 
-	console.log(ville+""+r);
+	//console.log(ville+""+r);
 
+	let jacksonville = fs.readFileSync("loc_ville.json");
+	jacksonville = JSON.parse(jacksonville);
 
-	var jacksonville = getJSON('https://github.com/Thiziri-Hafir/Open_Data/raw/main/Open_Data/villes-france-codes-postaux.json')
+	//console.log(jacksonville);
 	
-	console.log(jacksonville);
-	
-	var fjsv = jacksonville.filter(Ville == ville)
-	culture_sport_async(fjsv.lat,fjsv.long,r).then(res =>{ response.send(data)});
+	var fjsv = jacksonville.filter(function (result){
+        return result.nom == ville;
+    });
+    
+	culture_sport_async(fjsv[0].lat,fjsv[0].long,r).then(res =>{ response.send(res)});
 
 })
 
@@ -406,12 +422,12 @@ function culture_sport_async(lat,long, r){
 	var url = 'https://data.culture.gouv.fr/api/records/1.0/search/?dataset=base-des-lieux-et-des-equipements-culturels&q=&facet=type_equipement_ou_lieu&facet=label_et_appellation&facet=domaine&facet=sous_domaines&facet=departement&facet=adresse_postale&facet=nom&facet=coordonnees_gps_lat_lon&geofilter.distance='
 	
 
-    url = url+""+long+'%2C'+""+lat+'%2C'+"+"+r
+    url = url+""+lat+'%2C'+""+long+'%2C'+"+"+r
 
 	/* url = "/api/records/1.0/search/?dataset=base-des-lieux-et-des-equipements-culturels&q=&facet=type_equipement_ou_lieu&facet=label_et_appellation&facet=region&facet=domaine&facet=sous_domaines&facet=departement&geofilter.distance=47.21151478387656%2C-1.547461758200557%2C+1000 "
  */
 	console.log("url: ",url);
-	culture = axios
+	var culture = axios
           .get(url)
           .then(res => {
             let data = [];
@@ -435,7 +451,7 @@ function culture_sport_async(lat,long, r){
 
 	url = url+""+long+'%2C'+""+lat+'%2C'+"+"+r
 
-	sport = axios
+	var sport = axios
 		.get(url)
 		.then(res => {
 			let data = [];

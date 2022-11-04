@@ -30,13 +30,10 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 		<script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
 
-
-		
 		<style>
 		html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 		</style>
-
-		
+	
 <body class="w3-light-grey">
 
 	<!-- Top container -->
@@ -56,9 +53,7 @@
 		<h5>Menu</h5>
 	  </div>
 	  <div class="w3-bar-block">
-		
-		
-		
+	
 		<a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
 		
 		<form action="/graph" method="POST" enctype="multipart/form-data"> 
@@ -84,15 +79,12 @@
 			<a class="w3-bar-item w3-button w3-padding"><button style="border:1px solid transparent; background-color: transparent;" type="submit" name="submit" value="home"><i class="fa fa-trash" aria-hidden="true"></i>
 			  Suppression</button> </a>
 		</form>
-	
-
 	  </div>
 	</nav>
 	
 	
 	<!-- Overlay effect when opening sidebar on small screens -->
 	<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
-	
 	
 	
 	<!-- !PAGE CONTENT! -->
@@ -109,17 +101,17 @@
 					<div class="w3-row-padding" style="margin:0 -16px;">
 					  <div class="w3-half w3-margin-bottom">
 						<label> Quoi</label>
-						<input class="w3-input w3-border" type="text" placeholder="Monument, basilique..."  name="Quoi" id="Quoi">
+						<input class="w3-input w3-border" type="text" placeholder="Monument, basilique..."  name="Quoi" id="Monument">
 					  </div>
 			
 					  <div class="w3-half">
 						<label>Ou*</label>
-						<input class="w3-input w3-border" type="text"  placeholder="Montpellier, Paris..." name="Type" id="Type
+						<input class="w3-input w3-border" type="text"  placeholder="Montpellier, Paris..." name="Type" id="Ville
 						*" required>
 					  </div>
 					</div>
 
-					<button class="w3-button w3-light-green w3-padding-large w3-margin-top w3-margin-bottom" type="submit" name="submit" value="Rechercher"><i class="fa fa-search w3-margin-left"></i> Rechercher</button>
+					<button class="w3-button w3-light-green w3-padding-large w3-margin-top w3-margin-bottom" type="submit" name="submit" value="Rechercher" onclick="search()" > <i class="fa fa-search w3-margin-left"></i> Rechercher</button>
 				  </form>
 					<br>
 			  </div>
@@ -129,9 +121,15 @@
 		<hr>
 	
 		  <hr>
-				<div class="w3-container">
+
+				<div class="w3-container map-wrapper">
 					<div id="divmap" class="w3-container w3-right"  style="width:1000px; height:400px ; border: 3px solid #000">				
 					</div>
+					<div>
+						<input type="range" id="radius" name="radius"
+						min="1" max="1000" step="10">
+						<label for="radius">Range</label>
+					  </div>
 				</div>
 
 
@@ -152,7 +150,7 @@
 
 		<script type="text/javascript">
 			var map = L.map('divmap'); //Création de la carte
-			map.setView([ 50.5, 30.51], 12);//Spécification de la latitude et de la longitude ducentre de la carte (entre crochets) et du niveau de zoom initial
+			map.setView([ 43.6108, 3.8767], 12);//Spécification de la latitude et de la longitude ducentre de la carte (entre crochets) et du niveau de zoom initial
 			
 			// ajout d'une réf
 			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -233,6 +231,29 @@
 				mySidebar.style.display = "none";
 				overlayBg.style.display = "none";
 				}
+
+
+				function search() {
+					var ville = document.getElementById("ville").value 
+
+					const url = 'localhost:3000/latlong_from_ville/'+''+ville+'/'+ document.getElementById("radius").value
+
+					console.log(url);
+
+					var cult = fetch(url)
+									.then(response => response.json());
+
+				}
+
+				var slider = document.getElementById("radius");
+				var output = document.getElementById("demo");
+				output.innerHTML = slider.value; // Display the default slider value
+
+				// Update the current slider value (each time you drag the slider handle)
+				slider.oninput = function() {
+				output.innerHTML = this.value;
+				}
+
 											
 		</script>
 
