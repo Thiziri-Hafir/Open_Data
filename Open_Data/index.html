@@ -13,8 +13,11 @@
     <button onclick="search()">Rechercher</button>
     <div>
       <input type="range" id="radius" name="radius"
-      min="1" max="50" step="1">
+      min="100" max="5000" step="10">
       <label for="radius">Range</label>
+    </div>
+    <div id ="container">
+
     </div>
   </div>
 </body>
@@ -24,14 +27,26 @@
   function search() {
     var ville = document.getElementById("ville").value 
 
-    const url = 'localhost:3000/latlong_from_ville/'+''+ville+'/'+ document.getElementById("radius").value
+    const url = 'http://localhost:3000/latlong_from_ville/'+''+ville+'/'+ document.getElementById("radius").value
 
     console.log(url);
 
-    var cult = fetch(url)
-                    .then(response => response.json());
-    console.log(cult)
+    fetch(url)
+              .then(response => response.json()
+              .then(data => {
+                console.log(data)
+              }))
+              
 
+    
+    /* contentStr = "";
+
+    points.forEach(function(o){
+        contentStr += "<div>"+ o.nom +", adresse :  "+ o.adresse_postale +"</div>";
+    });
+    document.getElementById('container').innerHTML = contentStr; 
+    console.log(points);
+ */
   }
 
   var slider = document.getElementById("radius");

@@ -441,17 +441,20 @@ function culture_sport_async(lat,long, r){
 				temp_dic['s_domaine'] = element['fields']['sous_domaine'];
 				temp_dic['departement'] = element['fields']['departement'];
 				temp_dic['adresse_postale'] = element['fields']['adresse_postale'];
+				temp_dic['lat'] = element['fields']['coordonnees_gps_lat_lon'][0];
+				temp_dic['long'] = element['fields']['coordonnees_gps_lat_lon'][1];
+				
 				data.push(temp_dic)
 
                 });
                 return(data);
                 
               });
-/* 	var url = "https://equipements.sports.gouv.fr/api/records/1.0/search/?dataset=data-es&q=&facet=famille&facet=caract24&facet=caract25&facet=caract74&facet=caract33&facet=caract156&facet=caract159&facet=caract167&facet=caract168&facet=caract169&facet=atlas&facet=nom_region&facet=nom_dept&facet=coordonnees_gps_lat_lon&geofilter.distance="	
+	var url = "https://equipements.sports.gouv.fr/api/records/1.0/search/?dataset=data-es&q=&facet=famille&facet=caract24&facet=caract25&facet=caract74&facet=caract33&facet=caract156&facet=caract159&facet=caract167&facet=caract168&facet=caract169&facet=atlas&facet=nom_region&facet=nom_dept&facet=coordonnees_gps_lat_lon&geofilter.distance="	
 
-	url = url+""+long+'%2C'+""+lat+'%2C'+"+"+r
+	url = url+""+lat+'%2C'+""+long+'%2C'+"+"+r
 
-	var sport = axios
+	/* var sport = axios
 		.get(url)
 		.then(res => {
 			let data = [];
@@ -470,8 +473,8 @@ function culture_sport_async(lat,long, r){
 				});
 				return(data);
 				
-			});
-	 */
+			}); */
+	
 	return(culture)
 
 	
