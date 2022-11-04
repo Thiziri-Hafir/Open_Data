@@ -4,7 +4,6 @@
 		<title>Open Data</title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-
 		
 		<link rel="stylesheet" href="leaflet/leaflet.css" />		
 		<link rel="stylesheet" href="Leaflet.markercluster/dist/MarkerCluster.css" />
@@ -12,7 +11,6 @@
         <link rel="stylesheet" href="Leaflet.markercluster/dist/MarkerCluster.css" />
 		<link rel="stylesheet" href="Leaflet.markercluster/dist/MarkerCluster.Default.css" />
 		<link rel="stylesheet" href="static/styles/search_bar.css">
-
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
@@ -25,7 +23,6 @@
 		<script src="http://d3js.org/d3.v6.min.js"></script>
 		<script src="Leaflet.markercluster/dist/leaflet.markercluster.js"></script>
 		<script src="Leaflet.heat/dist/leaflet-heat.js"></script>
-
 		<script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 		<script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
@@ -34,7 +31,7 @@
 		html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 		</style>
 	
-<body class="w3-light-grey">
+<body class="w3-light-grey" onload="initialize()">
 
 	<!-- Top container -->
 	<div class="w3-bar w3-top w3-black w3-large " style="z-index:4">
@@ -43,15 +40,16 @@
 	
 	<!-- Sidebar/menu -->
 	<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px; " id="mySidebar"><br>
-	  <div class="w3-container w3-row">
-		<div class="w3-col s4">
-		  <img src="C:/wamp/www/DataViz/S2/Cours 5/app/static/img/cultura.png"  style="width: 250px;">
+		<div class="w3-container w3-row">
+			<div class="w3-col s4">
+				<img src="C:/wamp/www/DataViz/S2/Cours 5/app/static/img/cultura.png"  style="width: 250px;">
+			</div>
 		</div>
-	  </div>
-	  <hr>
-	  <div class="w3-container">
-		<h5>Menu</h5>
-	  </div>
+		<hr>
+		<div class="w3-container">
+			<h5>Menu</h5>
+		</div>
+
 	  <div class="w3-bar-block">
 	
 		<a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
@@ -86,15 +84,11 @@
 	<!-- Overlay effect when opening sidebar on small screens -->
 	<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
 	
-	
 	<!-- !PAGE CONTENT! -->
 	<div class="w3-main" style="margin-left:300px;margin-top:43px;">
-		<body>
-
 			<hr>
 			<div class="w3-container  w3-white">
-				<button  class="w3-button w3-block w3-light-green w3-left-align"><h8><B>Recherche :</B></h8></button> 
-				
+				<button  class="w3-button w3-block w3-light-green w3-left-align"><h8><B>Recherche :</B></h8></button> 	
 				<div id="display_domaine" style="margin-top: 10px;">
 	
 				  <form action="/graph" method="POST" enctype="multipart/form-data">
@@ -110,103 +104,46 @@
 						*" required>
 					  </div>
 					</div>
-
 					<button class="w3-button w3-light-green w3-padding-large w3-margin-top w3-margin-bottom" type="submit" name="submit" value="Rechercher" onclick="search()" > <i class="fa fa-search w3-margin-left"></i> Rechercher</button>
 				  </form>
-					<br>
-			  </div>
+				 <br>
+			    </div>
 			</div>
-	
-	
 		<hr>
-	
-		  <hr>
+		<hr>
 
-				<div class="w3-container map-wrapper">
-					<div id="divmap" class="w3-container w3-right"  style="width:1000px; height:400px ; border: 3px solid #000">				
-					</div>
-					<div>
-						<input type="range" id="radius" name="radius"
-						min="1" max="1000" step="10">
-						<label for="radius">Range</label>
-					  </div>
+			<div class="w3-container map-wrapper" >
+				<div id="map" class="w3-container w3-right"  style="width:1000px; height:400px ; border: 3px solid #000">				
 				</div>
+				<div>
+					<input type="range" id="radius" name="radius"
+					min="1" max="1000" step="10">
+					<label for="radius">Range</label>
+				</div>
+			</div>
 
-
-
-	
-		  <!-- Footer -->
-		  <footer class="w3-container w3-padding-16 w3-light-grey">
-			<h4></h4>
-			<p> .<a href="." target="_blank">.</a></p>
-			
-		  </footer>
+		<!-- Footer -->
+		<footer class="w3-container w3-padding-16 w3-light-grey">
+		<h4></h4>
+		<p> .<a href="." target="_blank">.</a></p>
 		
-		  <!-- End page content -->
-
-		  
-		</div>
+		</footer>	  
+	</div>
 
 
 		<script type="text/javascript">
-			var map = L.map('divmap'); //Création de la carte
-			map.setView([ 43.6108, 3.8767], 12);//Spécification de la latitude et de la longitude ducentre de la carte (entre crochets) et du niveau de zoom initial
-			
-			// ajout d'une réf
-			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-			{ attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>, Data by <a href="http://mass.gov/mgis">MassGIS</a>',
-				maxZoom: 17, //Ajuster le zoom pour l'adapter
-				minZoom: 1
-		     }).addTo(map);
+			function initialize() {
+				var map = L.map('map').setView([48.833, 2.333], 7); // LIGNE 18
 
-			// Charger le fichier avec jquery		
-			$.ajax({
-					url: "monumentshistoriques.geojson", //Nom du fichier à charger.
-					dataType: "json", //Type du fichier à charger.
-					success: function(rodents){
-						console.log(rodents); 
-
-				        // Ajout des image de localisation ou couche vecteur
-						L.geoJson(rodents).addTo(map);  
-
-                        // Remplacer le marqueur par gif
-						// On crée d'abords une icone
-						var ratIcon = L.icon({
-							//iconUrl: 'rat.gif',
-							iconUrl: 'rat.png', //Image de l’icône
-							iconSize: [25,25] //Taille de l’icône en pixels
-							});
-						// Préciser à la couche vecteur qu'il f'aut utiliser cette icone
-						// Juste aprés le nom de variable contenant les données
-						var ratLayer=L.geoJson(rodents,{ pointToLayer: function(feature,latlng){
-					        var marker = L.marker(latlng,{icon: ratIcon});
-
-							// Ajouter une infobull en rajoutant un truc à ajouter 
-					        marker.bindPopup(features.properties.LIBSQUART);
-					        return marker;
-				}}).addTo(map);  			
-				}
+				var osmLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { // LIGNE 20
+					attribution: '© OpenStreetMap contributors',
+					maxZoom: 19
 				});
 
-				
-			//Ajout Polygones
-			$.ajax({
-			url: "quartiers.geojson", 
-			dataType: "json", 
-				success: function(quartiers){
-				console.log(quartiers);
-				L.geoJson(quartiers, {
-					// Modifier la couleur en fonction de la densité  en ajoutant des param à la méthode					
-					style: function(feature){
-						return { 
-						color: "f00020", 
-						weight: 1,
-						fillColor: "#f00020", //la variable il faut la passé ici
-						fillOpacity: 0.6 
-					};
-				},
-				}).addTo(map);
-			}});
+				map.addLayer(osmLayer);
+			}
+    
+
 
 
 			// Get the Sidebar
