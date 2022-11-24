@@ -31,7 +31,7 @@
 		html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 		</style>
 	
-<body class="w3-light-grey" onload="initialize()">
+<body class="w3-light-grey">
 
 	<!-- Top container -->
 	<div class="w3-bar w3-top w3-black w3-large " style="z-index:4">
@@ -89,23 +89,13 @@
 			<hr>
 			<div class="w3-container  w3-white">
 				<button  class="w3-button w3-block w3-light-green w3-left-align"><h8><B>Recherche :</B></h8></button> 	
-				<div id="display_domaine" style="margin-top: 10px;">
-	
-				  <form action="/graph" method="POST" enctype="multipart/form-data">
-					<div class="w3-row-padding" style="margin:0 -16px;">
-					  <div class="w3-half w3-margin-bottom">
-						<label> Quoi</label>
-						<input class="w3-input w3-border" type="text" placeholder="Monument, basilique..."  name="Quoi" id="Monument">
-					  </div>
-			
+				<div id="display_domaine" style="margin-top: 10px;">			
 					  <div class="w3-half">
 						<label>Ou*</label>
-						<input class="w3-input w3-border" type="text"  placeholder="Montpellier, Paris..." name="Type" id="Ville
-						*" required>
+						<input class="w3-input w3-border" type="text"  placeholder="Montpellier, Paris..." name="Type" id="ville" required>
 					  </div>
 					</div>
-					<button class="w3-button w3-light-green w3-padding-large w3-margin-top w3-margin-bottom" type="submit" name="submit" value="Rechercher" onclick="search()" > <i class="fa fa-search w3-margin-left"></i> Rechercher</button>
-				  </form>
+					<button class="w3-button w3-light-green w3-padding-large w3-margin-top w3-margin-bottom" onclick="search()" > <i class="fa fa-search w3-margin-left"></i> Rechercher</button>
 				 <br>
 			    </div>
 			</div>
@@ -113,11 +103,11 @@
 		<hr>
 
 			<div class="w3-container map-wrapper" >
-				<div id="map" class="w3-container w3-right"  style="width:1000px; height:400px ; border: 3px solid #000">				
+				<div id="divmap" class="w3-container w3-right"  style="width:1000px; height:400px ; border: 3px solid #000">				
 				</div>
 				<div>
 					<input type="range" id="radius" name="radius"
-					min="1" max="1000" step="10">
+					min="500" max="1000" step="10">
 					<label for="radius">Range</label>
 				</div>
 			</div>
@@ -132,17 +122,23 @@
 
 
 		<script type="text/javascript">
-			function initialize() {
-				var map = L.map('map').setView([48.833, 2.333], 7); // LIGNE 18
+				// var map = L.map('map').setView([48.833, 2.333], 7); // LIGNE 18
 
-				var osmLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { // LIGNE 20
-					attribution: '© OpenStreetMap contributors',
-					maxZoom: 19
-				});
+				// var osmLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { // LIGNE 20
+				// 	attribution: '© OpenStreetMap contributors',
+				// 	maxZoom: 19
+				// });
 
-				map.addLayer(osmLayer);
-			}
-				
+				// map.addLayer(osmLayer);
+				var map = L.map('divmap'); //Création de la carte
+	            map.setView([ 50.5, 30.51], 12);//Spécification de la latitude et de la longitude ducentre de la carte (entre crochets) et du niveau de zoom initial
+
+	            // ajout d'une réf
+	            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+	            { attribution: 'Tiles by <a href="http://mapc.org/%22%3EMAPC</a>, Data by <a href="http://mass.gov/mgis%22%3EMassGIS</a>',
+	                maxZoom: 17, //Ajuster le zoom pour l'adapter
+	                minZoom: 1
+	             }).addTo(map);
 				
 
             
@@ -174,25 +170,41 @@
 
 
 				function search() {
-					var ville = document.getElementById("ville").value 
+				    var ville = document.getElementById("ville").value 
 
-					const url = 'localhost:3000/latlong_from_ville/'+''+ville+'/'+ document.getElementById("radius").value
+				    const url = 'http://localhost:3000/latlong_from_ville/'+''+ville+'/5000' //document.getElementById("radius").value
 
-					console.log(url);
+				    console.log(url);
 
-					var cult = fetch(url)
-									.then(response => response.json());
+				    fetch(url)
+				              .then(response => response.json()
+				              .then(data => {
+				                // console.log(data['culture'])
+				                // contentStr = "";
+								map.flyTo([data['lat'], data['long']], 14);
 
-				}
+				                data['culture'].forEach(function(o){
+				                	
+				                	var marker = L.marker([o['lat'], o['long']],{}).addTo(map);
+				                });
+				                // document.getElementById('container').innerHTML = contentStr; 
+				                // console.log(points);
+				                // console.log('ICI2')
+				                // var marker = L.marker([data['lat'], data['long']],{}).addTo(map);
+								console.log('ICI')
+				              }))
+				    
+				 
+				  }
 
-				var slider = document.getElementById("radius");
-				var output = document.getElementById("demo");
-				output.innerHTML = slider.value; // Display the default slider value
+				// var slider = document.getElementById("radius");
+				// var output = document.getElementById("demo");
+				// output.innerHTML = slider.value; // Display the default slider value
 
-				// Update the current slider value (each time you drag the slider handle)
-				slider.oninput = function() {
-				output.innerHTML = this.value;
-				}
+				// // Update the current slider value (each time you drag the slider handle)
+				// slider.oninput = function() {
+				// output.innerHTML = this.value;
+				// }
 
 											
 		</script>
