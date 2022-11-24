@@ -44,11 +44,12 @@ const PORT = process.env.PORT || 3000;
 
 
 
-app.get('/infos_from_ville/:ville/:r', function(req, response){
+app.get('/infos_from_ville/:ville/:r/:nbresults', function(req, response){
 	console.log('HELLO2')
 
 	const ville = req.params.ville
 	const r = req.params.r
+	const nbresults = req.params.nbresults
 
 	let loc_ville = fs.readFileSync("loc_ville.json");
 	loc_ville = JSON.parse(loc_ville);
@@ -57,13 +58,13 @@ app.get('/infos_from_ville/:ville/:r', function(req, response){
         return result.nom == ville;
     });
     
-	culture_sport_async(loc_ville_filter[0].lat,loc_ville_filter[0].long,r).then(res =>{ response.send({'lat': loc_ville_filter[0].lat, 'long':loc_ville_filter[0].long, 'culture': res})});
+	Promise.all(culture_sport_async(loc_ville_filter[0].lat,loc_ville_filter[0].long,r,nbresults)).then(res =>{ response.send({'lat': loc_ville_filter[0].lat, 'long':loc_ville_filter[0].long, 'results': res})});
 
 
 })
 
-function culture_sport_async(lat,long, r){
-	var url = 'https://data.culture.gouv.fr/api/records/1.0/search/?dataset=base-des-lieux-et-des-equipements-culturels&q=&rows=500&facet=type_equipement_ou_lieu&facet=label_et_appellation&facet=domaine&facet=sous_domaines&facet=departement&facet=adresse_postale&facet=nom&facet=coordonnees_gps_lat_lon&geofilter.distance='
+function culture_sport_async(lat,long, r, nbresults){
+	var url = 'https://data.culture.gouv.fr/api/records/1.0/search/?dataset=base-des-lieux-et-des-equipements-culturels&q=&rows='+nbresults+'&facet=type_equipement_ou_lieu&facet=label_et_appellation&facet=domaine&facet=sous_domaines&facet=departement&facet=adresse_postale&facet=nom&facet=coordonnees_gps_lat_lon&geofilter.distance='
 	
     url = url+""+lat+'%2C'+""+long+'%2C'+"+"+r
 
@@ -93,11 +94,12 @@ function culture_sport_async(lat,long, r){
                 return(data);
                 
               });
-	var url = "https://equipements.sports.gouv.fr/api/records/1.0/search/?dataset=data-es&q=&facet=famille&facet=caract24&facet=caract25&facet=caract74&facet=caract33&facet=caract156&facet=caract159&facet=caract167&facet=caract168&facet=caract169&facet=atlas&facet=nom_region&facet=nom_dept&facet=coordonnees_gps_lat_lon&geofilter.distance="	
+	var url = "https://equipements.sports.gouv.fr/api/records/1.0/search/?dataset=data-es&rows="+nbresults+"&q=&facet=famille&facet=caract24&facet=caract25&facet=caract74&facet=caract33&facet=caract156&facet=caract159&facet=caract167&facet=caract168&facet=caract169&facet=atlas&facet=nom_region&facet=nom_dept&facet=coordonnees_gps_lat_lon&geofilter.distance="	
 
 	url = url+""+lat+'%2C'+""+long+'%2C'+"+"+r
+	console.log(url)
 
-	/* var sport = axios
+	 var sport = axios
 		.get(url)
 		.then(res => {
 			let data = [];
@@ -110,15 +112,16 @@ function culture_sport_async(lat,long, r){
 					temp_dic['departement'] = element['fields']['nom_dept'];
 					temp_dic['code_postale'] = element['fields']['codepostal'];
 					temp_dic['adresse'] = element['fields']['adresse'];
-
+					temp_dic['lat'] = element['fields']['coordonnees'][0]
+					temp_dic['long'] = element['fields']['coordonnees'][1]
 					data.push(temp_dic)
 
 				});
 				return(data);
 				
-			}); */
+			}); 
 	
-	return(culture)
+  return([culture, sport]);
 
 	
 }
