@@ -44,7 +44,8 @@ const PORT = process.env.PORT || 3000;
 
 
 
-app.get('/latlong_from_ville/:ville/:r', function(req, response){
+app.get('/infos_from_ville/:ville/:r', function(req, response){
+	console.log('HELLO2')
 
 	const ville = req.params.ville
 	const r = req.params.r
@@ -62,15 +63,16 @@ app.get('/latlong_from_ville/:ville/:r', function(req, response){
 })
 
 function culture_sport_async(lat,long, r){
-	var url = 'https://data.culture.gouv.fr/api/records/1.0/search/?dataset=base-des-lieux-et-des-equipements-culturels&q=&facet=type_equipement_ou_lieu&facet=label_et_appellation&facet=domaine&facet=sous_domaines&facet=departement&facet=adresse_postale&facet=nom&facet=coordonnees_gps_lat_lon&geofilter.distance='
+	var url = 'https://data.culture.gouv.fr/api/records/1.0/search/?dataset=base-des-lieux-et-des-equipements-culturels&q=&rows=500&facet=type_equipement_ou_lieu&facet=label_et_appellation&facet=domaine&facet=sous_domaines&facet=departement&facet=adresse_postale&facet=nom&facet=coordonnees_gps_lat_lon&geofilter.distance='
 	
-
     url = url+""+lat+'%2C'+""+long+'%2C'+"+"+r
 
 	console.log("url: ",url);
 	var culture = axios
           .get(url)
           .then(res => {
+          	console.log('LENGTH')
+          	console.log(res.data['records'].length)
             let data = [];
             res.data['records'].forEach(element =>{
 				let temp_dic = {}

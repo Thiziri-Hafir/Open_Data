@@ -131,7 +131,7 @@
 
 				// map.addLayer(osmLayer);
 				var map = L.map('divmap'); //Création de la carte
-	            map.setView([ 50.5, 30.51], 12);//Spécification de la latitude et de la longitude ducentre de la carte (entre crochets) et du niveau de zoom initial
+	            map.setView([ 43.836699, 4.360054], 12);//Spécification de la latitude et de la longitude ducentre de la carte (entre crochets) et du niveau de zoom initial
 
 	            // ajout d'une réf
 	            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -172,7 +172,7 @@
 				function search() {
 				    var ville = document.getElementById("ville").value 
 
-				    const url = 'http://localhost:3000/latlong_from_ville/'+''+ville+'/5000' //document.getElementById("radius").value
+				    const url = 'http://localhost:3000/infos_from_ville/'+''+ville+'/5000' //document.getElementById("radius").value
 
 				    console.log(url);
 
@@ -185,7 +185,7 @@
 
 				                data['culture'].forEach(function(o){
 				                	
-				                	var marker = L.marker([o['lat'], o['long']],{}).addTo(map);
+				                	var marker = L.marker([o['lat'], o['long']],{title: o['nom']}).addTo(map);
 				                });
 				                // document.getElementById('container').innerHTML = contentStr; 
 				                // console.log(points);
