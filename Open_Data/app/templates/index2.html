@@ -46,12 +46,8 @@
 			</div>
 		</div>
 		<hr>
-		<div class="w3-container">
-			<h5>Menu</h5>
-		</div>
 
-	  <div class="w3-bar-block">
-	
+	  <div class="w3-bar-block" id="sub-sidebar">
 	  </div>
 	</nav>
 	
@@ -169,18 +165,24 @@
 
 				                data['results'][0].forEach(function(o){
 				                	
-				                	var marker = L.marker([o['lat'], o['long']],{title: o['nom'], icon: redIcon}).addTo(map);
+				                	var marker = L.marker([o['lat'], o['long']],{title: o['nom'], icon: redIcon}).on('click', showInfo.bind(null, o)).addTo(map);
 				                });
 
 				                data['results'][1].forEach(function(o){
 				                	
-				                	var marker = L.marker([o['lat'], o['long']],{title: o['nom_installation']}).addTo(map);
+				                	var marker = L.marker([o['lat'], o['long']],{title: o['nom']}).on('click', showInfo.bind(null, o)).addTo(map);
 				                });
 								console.log('ITCI')
 				              }))
 				    
 				 
 				  }
+				  function showInfo(marker ,e) {
+					    console.log(marker);
+					    const sidebar = document.getElementById("sub-sidebar");
+					    sidebar.innerHTML = "<div><div>Nom : "+marker['nom']+"</div><div>Adresse : "+marker['adresse']+"</div><div>Code Postal : "+marker['code_postal']+"</div><div>Departement : "+marker['departement']+"</div><div>Famille : "+marker['famille']+"</div></div>"
+
+					}
 
 
 

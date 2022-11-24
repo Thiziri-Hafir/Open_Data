@@ -80,11 +80,10 @@ function culture_sport_async(lat,long, r, nbresults){
 				temp_dic['id'] = element['fields']['Code_Insee_EPCI'];
 				temp_dic['nom'] = element['fields']['nom'];
 				temp_dic['type'] = element['fields']['type_equipement_ou_lieu']
-				temp_dic['label_et_appellation'] = element['fields']['label_et_appellation'];
-				temp_dic['domaine'] = element['fields']['domaine'];
-				temp_dic['s_domaine'] = element['fields']['sous_domaine'];
+				temp_dic['famille'] = element['fields']['domaine'];
 				temp_dic['departement'] = element['fields']['departement'];
-				temp_dic['adresse_postale'] = element['fields']['adresse_postale'];
+				temp_dic['code_postal'] = element['fields']['code_postal']
+				temp_dic['adresse'] = element['fields']['adresse_postale'];
 				temp_dic['lat'] = element['fields']['coordonnees_gps_lat_lon'][0];
 				temp_dic['long'] = element['fields']['coordonnees_gps_lat_lon'][1];
 				
@@ -105,12 +104,12 @@ function culture_sport_async(lat,long, r, nbresults){
 			let data = [];
 			res.data['records'].forEach(element =>{
 					let temp_dic = {}
+					temp_dic['type'] = element['fields']['numinstallation']
 					temp_dic['type'] = element['fields']['carac168'];
-					temp_dic['type_equipement'] = element['fields']['typeequipement']
-					temp_dic['nom_installation'] = element['fields']['nominstallation'];
+					temp_dic['nom'] = element['fields']['nominstallation'];
 					temp_dic['famille'] = element['fields']['famille'];
 					temp_dic['departement'] = element['fields']['nom_dept'];
-					temp_dic['code_postale'] = element['fields']['codepostal'];
+					temp_dic['code_postal'] = element['fields']['codepostal'];
 					temp_dic['adresse'] = element['fields']['adresse'];
 					temp_dic['lat'] = element['fields']['coordonnees'][0]
 					temp_dic['long'] = element['fields']['coordonnees'][1]
