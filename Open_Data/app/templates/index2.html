@@ -98,14 +98,6 @@
 
 
 		<script type="text/javascript">
-				// var map = L.map('map').setView([48.833, 2.333], 7); // LIGNE 18
-
-				// var osmLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { // LIGNE 20
-				// 	attribution: '© OpenStreetMap contributors',
-				// 	maxZoom: 19
-				// });
-
-				// map.addLayer(osmLayer);
 				var map = L.map('divmap'); //Création de la carte
 	            map.setView([ 43.836699, 4.360054], 12);//Spécification de la latitude et de la longitude ducentre de la carte (entre crochets) et du niveau de zoom initial
 
@@ -116,10 +108,6 @@
 	                minZoom: 1
 	             }).addTo(map);
 				
-
-            
-
-
 
 			// Get the Sidebar
 				var mySidebar = document.getElementById("mySidebar");
@@ -151,9 +139,6 @@
 				    var r = document.getElementById("radius").value
 
 				    const url = 'http://localhost:3000/infos_from_ville/'+ville+'/'+r+'/'+nbresults
-
-				    console.log(url);
-
 				    fetch(url)
 				              .then(response => response.json()
 				              .then(data => {
@@ -178,26 +163,38 @@
 				 
 				  }
 				  function showInfo(marker ,e) {
-					    console.log(marker);
 					    const sidebar = document.getElementById("sub-sidebar");
-					    sidebar.innerHTML = "<div><div>Nom : "+marker['nom']+"</div><div>Adresse : "+marker['adresse']+"</div><div>Code Postal : "+marker['code_postal']+"</div><div>Departement : "+marker['departement']+"</div><div>Famille : "+marker['famille']+"</div></div>"
+					    sidebar.innerHTML = "<div><div>Nom : "+marker['nom']+"</div><div>Adresse : "+marker['adresse']+"</div><div>Code Postal : "+marker['code_postal']+"</div><div>Departement : "+marker['departement']+"</div><div>Famille : "+marker['famille']+"</div></div><hr><div class='w3-container w3-row'><div class='w3-col'><b>AVIS :</b></div></div><hr>"
+
+					    const url = 'http://localhost:3000/get_avis/'+marker['id']
+					    fetch(url).then(response => response.json()
+					    		  .then(data=>{
+					    		  	data.forEach(function(o){
+					    		  		sidebar.innerHTML += "<div class='w3-container w3-row'><div class='w3-col'>"+o['Avis']+"</div></div><hr>"
+					    		  	});
+					    		  	add_input = '<div id="display_domaine" style="margin-top: 10px;"><div class="w3-half"><label>Ajouter un avis</label><input class="w3-input w3-border" type="text"  placeholder="..." name="Type" id="add_avis" required></div></div><br></div>'
+					   				sidebar.innerHTML += add_input
+					    		  	var inputElement = document.createElement('input');
+									inputElement.type = "button"
+									inputElement.className = "w3-button w3-light-green w3-padding-large margin-top w3-margin-bottom"
+									inputElement.value = "AJOUTER"
+									inputElement.addEventListener('click', function(){
+									    add_avis(marker['id']);
+									});
+
+									sidebar.appendChild(inputElement);
+					    		  	
+					    		  }))
 
 					}
 
-
-
-				// var slider = document.getElementById("radius");
-				// var output = document.getElementById("demo");
-				// output.innerHTML = slider.value; // Display the default slider value
-
-				// // Update the current slider value (each time you drag the slider handle)
-				// slider.oninput = function() {
-				// output.innerHTML = this.value;
-				// }
-
+					function add_avis(id){
+						var avis = document.getElementById("add_avis").value
+						const url = 'http://localhost:3000/add_avis/'+id+'/'+avis
+						fetch(url)
+						console.log(url)
+					}
 											
 		</script>
-
-		
 	</body>
 </html>

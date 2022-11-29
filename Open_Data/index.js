@@ -5,21 +5,21 @@ import fetch from 'node-fetch';
 import axios from 'axios';
 import express from 'express';
 import cors from 'cors';
-import mongodb from 'mongodb';
+import { MongoClient } from 'mongodb';
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from 'swagger-ui-express';
 import bodyParser from "body-parser";
-
 
 const app = express();
 
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
+const uri = "mongodb+srv://opendata:azertymiashs@open-data.7jjwuga.mongodb.net/?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-/* const urimongo = require("./resources/secret/databaseconfig.js").url; // TODO
- */
-
+var collection;
 
 const swaggerOptions = {
     swaggerDefinition: {
@@ -41,6 +41,10 @@ app.use(express.static('app'));
 
 const PORT = process.env.PORT || 3000;
 
+
+app.listen(PORT, function(){
+	console.log('Hello :'+ PORT);
+})
 
 
 
@@ -64,6 +68,9 @@ app.get('/infos_from_ville/:ville/:r/:nbresults', function(req, response){
 })
 
 function culture_sport_async(lat,long, r, nbresults){
+	console.log('ADDNOTE')
+	// executeStudentCrudOperations()
+
 	var url = 'https://data.culture.gouv.fr/api/records/1.0/search/?dataset=base-des-lieux-et-des-equipements-culturels&q=&rows='+nbresults+'&facet=type_equipement_ou_lieu&facet=label_et_appellation&facet=domaine&facet=sous_domaines&facet=departement&facet=adresse_postale&facet=nom&facet=coordonnees_gps_lat_lon&geofilter.distance='
 	
     url = url+""+lat+'%2C'+""+long+'%2C'+"+"+r
@@ -104,8 +111,8 @@ function culture_sport_async(lat,long, r, nbresults){
 			let data = [];
 			res.data['records'].forEach(element =>{
 					let temp_dic = {}
-					temp_dic['type'] = element['fields']['numinstallation']
-					temp_dic['type'] = element['fields']['carac168'];
+					temp_dic['id'] = element['fields']['numinstallation']
+					temp_dic['type'] = element['fields']['typequipement'];
 					temp_dic['nom'] = element['fields']['nominstallation'];
 					temp_dic['famille'] = element['fields']['famille'];
 					temp_dic['departement'] = element['fields']['nom_dept'];
@@ -207,66 +214,22 @@ app.get('/home', function(req, response){
 })
 
 
-app.listen(PORT, function(){
-	console.log('Hello :'+ PORT);
-})
 
 
+app.get("/get_avis/:id", (request, response) => {
+		const id = request.params.id
+    client.connect(err => {
+		  collection = client.db("opendata").collection("interest_point_notation").find({"id":id}).toArray(function(err, docs){
+			    if (err) throw err;
+			    response.send(docs);
+			 });
+		});
+});
 
-
-function postPoll(idwin, idloose) {
-    var body = {win:idwin, loose:idloose};
-    var urlpoll = "/poll";
-    fetch(urlpoll, {  method:'POST', 
-                      body: JSON.stringify(body)  ,
-                      headers:{'Content-Type': 'application/json'}, 
-                      mode:"cors", 
-                      cache:'default'}).then(
-        function(response){ 
-            window.location.reload();
-        })
-}
-
-
-app.post("/poll", cors(), function (request, response) {
-    //récupérer les données de la requête
-    var body = request.body;
-    //pousser en base de données
-    mongodb.MongoClient.connect(urimongo, { useUnifiedTopology: true }, function (err, client) {
-        if (err) console.log("error", err);
-        else {
-            try {client.db("otakuotake").collection("poll").insertOne(body);}
-             catch(error) {
-                throw err;
-             }
-        }
-    }); 
-})
-
-//var csv is the CSV file with headers
-function csvJSON(csv){
-
-  var lines=csv.split("\n");
-
-  var result = [];
-
-  var headers=lines[0].split(",");
-
-  for(var i=1;i<lines.length;i++){
-
-    var obj = {};
-    var currentline=lines[i].split(",");
-
-    for(var j=0;j<headers.length;j++){
-      obj[headers[j]] = currentline[j];
-    }
-
-    result.push(obj);
-
-  }
-  
-  //return result; //JavaScript object
-  return JSON.stringify(result); //JSON
-}
-
-
+app.get("/add_avis/:id/:avis", (request, response) => {
+    const id = request.params.id
+    const avis = request.params.avis
+    client.connect(err => {
+		  collection = client.db("opendata").collection("interest_point_notation").insertOne({'id':id, 'Avis': avis});
+		});
+});
