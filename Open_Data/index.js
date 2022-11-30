@@ -222,3 +222,10 @@ app.post("/add_avis", (request, response) => {
 	    });
 	});
   });
+
+
+  app.use(
+    '/api-docs',
+    swaggerUi.serve, 
+    swaggerUi.setup(swaggerDocument)
+  );
