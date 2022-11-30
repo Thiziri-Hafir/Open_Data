@@ -223,6 +223,13 @@ app.get("/get_avis/:id", (request, response) => {
 
 app.post("/add_avis", (request, response) => {
     client.connect(err => {
-		  collection = client.db("opendata").collection("interest_point_notation").insertOne(request.body);
-		});
-});
+		  collection = client.db("opendata").collection("interest_point_notation").insertOne(request.body, function (err, result) {
+	      if (err) {
+	        response.status(400).send("Error inserting matches!");
+	      } else {
+	        console.log(`Added a new match with id ${result.insertedId}`);
+	        response.status(204).send();
+	      }
+	    });
+	});
+  });
