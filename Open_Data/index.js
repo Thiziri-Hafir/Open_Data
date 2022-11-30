@@ -6,6 +6,9 @@ import axios from 'axios';
 import express from 'express';
 import cors from 'cors';
 import { MongoClient } from 'mongodb';
+import swaggerJSDoc from "swagger-jsdoc";
+import * as swaggerUi from 'swagger-ui-express';
+import * as swaggerDocument from "./swagger.json";
 import bodyParser from "body-parser";
 
 const app = express();
@@ -18,11 +21,6 @@ const uri = "mongodb+srv://opendata:azertymiashs@open-data.7jjwuga.mongodb.net/?
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 var collection;
-
-// Swagger ingtegration
-const swaggerUi = require('swagger-ui-express'),
-    swaggerDocument = require('./swagger.json');
-
 
 app.use(express.static('app'));
 
@@ -221,9 +219,11 @@ app.post("/add_avis", (request, response) => {
 		});
   });
 
-
   app.use(
     '/api-docs',
     swaggerUi.serve, 
     swaggerUi.setup(swaggerDocument)
   );
+
+
+
