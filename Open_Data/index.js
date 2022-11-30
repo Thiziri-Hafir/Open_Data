@@ -48,7 +48,7 @@ app.listen(PORT, function(){
 
 
 app.get('/home', function(req, response){
-	fs.promises.readFile("app/templates/index2.html")
+	fs.promises.readFile("app/templates/index.html")
         .then(contents => {
             response.setHeader("Content-Type", "text/html");
             response.writeHead(200);
@@ -222,14 +222,14 @@ app.get("/get_avis/:id", (request, response) => {
 });
 
 app.post("/add_avis", (request, response) => {
-    client.connect(err => {
-		  collection = client.db("opendata").collection("interest_point_notation").insertOne(request.body, function (err, result) {
-	      if (err) {
-	        response.status(400).send("Error inserting matches!");
-	      } else {
-	        console.log(`Added a new match with id ${result.insertedId}`);
-	        response.status(204).send();
-	      }
-	    });
-	});
+	    client.connect(err => {
+			  collection = client.db("opendata").collection("interest_point_notation").insertOne(request.body, function (err, result) {
+		      if (err) {
+		        response.status(400).send("Error inserting matches!");
+		      } else {
+		        console.log(`Added a new match with id ${result.insertedId}`);
+		        response.status(204).send();
+		      }
+		    });
+		});
   });
