@@ -1,0 +1,188 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0", 
+      "title": "Documentation de l'API : Localisation de monuments, lieux sportifs et culturels",
+      "description": "Notre API permet aux utilsateurs de rechercher sur une carte, la localistion de monuments, de lieux sportifs et de lieux culturels et cela dans un rayon choisi. Il est possible de consulter les notes données par les utilisateurs et qui sont renvoyées par une autre API, comme il est possible de noter une recherche courante",
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "host": "localhost:3000",
+    "basePath": "/",
+    "tags": [
+      {
+        "name": "Users",
+        "description": "API for users in the system"
+      }
+    ],
+    "schemes": ["http"],
+    "consumes": ["loc_ville.json", "https://data.culture.gouv.fr/api","https://equipements.sports.gouv.fr/api"],
+    "produces": ["datajson.json"],   
+     
+    "paths": {
+      "/infos_from_ville/:ville/:r/:nbresults": {
+        "get": {
+          "tags": ["Download the data from loc_ville.json"],
+          "summary": "Get the cities location",
+          "responses": {
+            "200": {
+              "description": "Reads a csv file and returns cities name and location ",
+              "schema": {
+                "$ref": "#/definitions/CSV"
+              }
+            }
+          }
+        }
+      },
+      "/culture_async/:long/:lat/:r": {
+        "get": {
+          "tags": ["Get the data from https://data.culture.gouv.fr/api"],
+          "summary": "Get the monuments data",
+          "responses": {
+            "200": {
+              "description": "Requests API and gets several data about different monuments",
+              "schema": {
+                "$ref": "#/definitions/Culture"
+              }
+            }
+          }
+        }
+    },
+
+    "/sport_async/:long/:lat/:r": {
+        "get": {
+          "tags": [" Get the data from https://equipements.sports.gouv.fr/api"],
+          "summary": "Get the sports clubs data",
+          "responses": {
+            "200": {
+              "description": "Requests API and gets several data about different sports clubs data",
+              "schema": {
+                "$ref": "#/definitions/Sport"
+              }
+            }
+          }
+        }
+      }
+    },
+
+
+      
+      "definitions": {
+        "CSV": {
+          "required": ["id", "departement", "nom","cp","superficie","lat","lon"],
+          "properties": {
+            "id": {
+              "type": "integer",
+               
+               "exemple": 500,
+              "uniqueItems": true
+            },
+            "departement": {
+              "type": "integer"
+            },
+            "nom": {
+              "type": "string"
+            },
+            "cp": {
+              "type": "integer"
+            },
+            "superficie": {
+              "type": "float"        
+            },
+            "lat":{
+              "type": "float"        
+            },
+            "lon":{
+              "type": "float"        
+            }
+          }
+        },
+        
+        "Culture": {
+            "required": ["id","nom","type","famille","departement","code_postal","adresse","lat","long"],
+            "properties": {
+              "id": {
+                "type": "integer",
+                 
+                 "exemple": 500,
+                "uniqueItems": true
+              },
+              "departement": {
+                "type": "integer"
+              },
+              "nom": {
+                "type": "string"
+              },
+              "famille": {
+                "type": "string"
+              },
+              "code_postal": {
+                "type": "integer"        
+              },
+              "adresse": {
+                "type": "string"        
+              },
+              "lat":{
+                "type": "float"        
+              },
+              "lon":{
+                "type": "float"        
+              }
+            }
+          },
+  
+      
+          "Sport": {
+            "required": ["id","nom","type","famille","departement","code_postal","adresse","lat","long"],
+            "properties": {
+              "id": {
+                "type": "integer",
+                 
+                 "exemple": 500,
+                "uniqueItems": true
+              },
+              "departement": {
+                "type": "integer"
+              },
+              "nom": {
+                "type": "string"
+              },
+              "famille": {
+                "type": "string"
+              },
+              "code_postal": {
+                "type": "integer"        
+              },
+              "adresse": {
+                "type": "string"        
+              },
+              "lat":{
+                "type": "float"        
+              },
+              "lon":{
+                "type": "float"        
+              }
+            }
+          }
+        
+
+      }
+
+}
+        
+      
+    
+
+   
+  
+  
+      
+    
+  
+
+
+
+
+  
