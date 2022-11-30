@@ -6,8 +6,6 @@ import axios from 'axios';
 import express from 'express';
 import cors from 'cors';
 import { MongoClient } from 'mongodb';
-import swaggerJSDoc from "swagger-jsdoc";
-import swaggerUi from 'swagger-ui-express';
 import bodyParser from "body-parser";
 
 const app = express();
