@@ -5,10 +5,9 @@ import fetch from 'node-fetch';
 import axios from 'axios';
 import express from 'express';
 import cors from 'cors';
-import { MongoClient } from 'mongodb';
-import swaggerJSDoc from "swagger-jsdoc";
+import { MongoClient } from 'mongodb'; 
 import * as swaggerUi from 'swagger-ui-express';
-import * as swaggerDocument from "./swagger.json";
+import * as swaggerDocument from "./swagger.json" assert { type: 'json' };;
 import bodyParser from "body-parser";
 
 const app = express();
