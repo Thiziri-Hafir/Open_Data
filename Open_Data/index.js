@@ -21,21 +21,10 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 var collection;
 
-const swaggerOptions = {
-    swaggerDefinition: {
-        info: {
-            title: "Documentation de l'API ",
-            version: "1.0.0",
-            description: "Documentation des différentes routes de l'API",
-        }
-    },
-    apis: ['index.js'],
-};
+// Swagger ingtegration
+const swaggerUi = require('swagger-ui-express'),
+    swaggerDocument = require('./swagger.json');
 
-const swaggerDocs = swaggerJSDoc(swaggerOptions);
-
-
-app.use('/api-docs',swaggerUi.serve,swaggerUi.setup(swaggerDocs));
 
 app.use(express.static('app'));
 
