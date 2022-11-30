@@ -47,6 +47,14 @@ app.listen(PORT, function(){
 })
 
 
+app.get('/home', function(req, response){
+	fs.promises.readFile("app/templates/index2.html")
+        .then(contents => {
+            response.setHeader("Content-Type", "text/html");
+            response.writeHead(200);
+            response.end(contents);
+        })
+})
 
 app.get('/infos_from_ville/:ville/:r/:nbresults', function(req, response){
 	console.log('HELLO2')
@@ -84,7 +92,7 @@ function culture_sport_async(lat,long, r, nbresults){
             let data = [];
             res.data['records'].forEach(element =>{
 				let temp_dic = {}
-				temp_dic['id'] = element['fields']['Code_Insee_EPCI'];
+				temp_dic['id'] = element['recordid'];
 				temp_dic['nom'] = element['fields']['nom'];
 				temp_dic['type'] = element['fields']['type_equipement_ou_lieu']
 				temp_dic['famille'] = element['fields']['domaine'];
@@ -111,7 +119,7 @@ function culture_sport_async(lat,long, r, nbresults){
 			let data = [];
 			res.data['records'].forEach(element =>{
 					let temp_dic = {}
-					temp_dic['id'] = element['fields']['numinstallation']
+					temp_dic['id'] = element['recordid']
 					temp_dic['type'] = element['fields']['typequipement'];
 					temp_dic['nom'] = element['fields']['nominstallation'];
 					temp_dic['famille'] = element['fields']['famille'];
@@ -203,19 +211,6 @@ app.get('/sport_async/:long/:lat/:r', function(req, response){
 })
 
 
-
-app.get('/home', function(req, response){
-	fs.promises.readFile("app/templates/index2.html")
-        .then(contents => {
-            response.setHeader("Content-Type", "text/html");
-            response.writeHead(200);
-            response.end(contents);
-        })
-})
-
-
-
-
 app.get("/get_avis/:id", (request, response) => {
 		const id = request.params.id
     client.connect(err => {
@@ -226,10 +221,8 @@ app.get("/get_avis/:id", (request, response) => {
 		});
 });
 
-app.get("/add_avis/:id/:avis", (request, response) => {
-    const id = request.params.id
-    const avis = request.params.avis
+app.post("/add_avis", (request, response) => {
     client.connect(err => {
-		  collection = client.db("opendata").collection("interest_point_notation").insertOne({'id':id, 'Avis': avis});
+		  collection = client.db("opendata").collection("interest_point_notation").insertOne(request.body);
 		});
 });
