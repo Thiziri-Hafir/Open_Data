@@ -59,6 +59,17 @@ app.get('/infos_from_ville/:ville/:r/:nbresults', function(req, response){
 
 })
 
+app.get('/other_group_data/:ville', function(request, response){
+		const ville = request.params.ville
+		var url = "https://opendatamiashs.osc-fr1.scalingo.io/get/"+ville
+		var note_sum = 0
+		var test = axios.get(url).then(res =>{
+			var length = res.data.length
+			res.data.forEach(element=>{note_sum+=element['scoreInternet'];console.log(element['scoreInternet'])});
+			response.send({'moyenne_note':+note_sum/length})
+		})
+});
+
 function culture_sport_async(lat,long, r, nbresults){
 	console.log('ADDNOTE')
 	// executeStudentCrudOperations()

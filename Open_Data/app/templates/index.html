@@ -77,6 +77,9 @@
 					<label>Nombre de résultats par catégories</label>
 					<input class="w3-input w3-border" type="text"  placeholder="500,1000,20000..." name="nbresults" id="nbresults" required>
 				  </div>
+				<div id="other_group_note">
+					
+				</div>
 			</div>
 
 				
@@ -84,7 +87,7 @@
 		<hr>
 
 			<div class="w3-container map-wrapper" >
-				<div id="divmap" class="w3-container w3-right"  style="width:1000px; height:400px ; border: 3px solid #000">				
+				<div id="divmap" class="w3-container w3-right"  style="width:84%; height:700px ; border: 3px solid #000">				
 				</div>
 			</div>
 
@@ -157,8 +160,15 @@
 				                	
 				                	var marker = L.marker([o['lat'], o['long']],{title: o['nom']}).on('click', showInfo.bind(null, o)).addTo(map);
 				                });
-								console.log('ITCI')
 				              }))
+				    var uppercase_city = ville.toUpperCase()
+				    const other_group_info_url = "/other_group_data/"+uppercase_city
+				    fetch(other_group_info_url)
+				    			.then(response => response.json()
+				    			.then(data=>{
+				    				const html_other_group_div = document.getElementById('other_group_note')
+				    				html_other_group_div.innerHTML = "NOTE MOYENNE DE LA VILLE SELON LE GROUPE 'NOTE MA VILLE' : "+data['moyenne_note']
+				    			}))
 				    
 				 
 				  }
