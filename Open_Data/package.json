@@ -10,7 +10,8 @@
     "node-fetch": "^2.6.7",
     "request": "^2.88.2",
     "swagger-jsdoc": "^6.2.5",
-    "swagger-ui-express": "^4.5.0"
+    "swagger-ui-express": "^4.5.0",
+    "openapi": "3.0.0"
 
   },
   "scripts": {
