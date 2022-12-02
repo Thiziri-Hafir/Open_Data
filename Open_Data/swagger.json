@@ -9,7 +9,7 @@
         "url": "https://opensource.org/licenses/MIT"
       }
     },
-    "host": "localhost:3000",
+    "host": "https://opendatathiziri.osc-fr1.scalingo.io/home",
     "basePath": "/",
     "tags": [
       {
