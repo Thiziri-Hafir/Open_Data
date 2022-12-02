@@ -41,8 +41,6 @@ app.get('/home', function(req, response){
 })
 
 app.get('/infos_from_ville/:ville/:r/:nbresults', function(req, response){
-	console.log('HELLO2')
-
 	const ville = req.params.ville
 	const r = req.params.r
 	const nbresults = req.params.nbresults
@@ -65,25 +63,19 @@ app.get('/other_group_data/:ville', function(request, response){
 		var note_sum = 0
 		var test = axios.get(url).then(res =>{
 			var length = res.data.length
-			res.data.forEach(element=>{note_sum+=element['scoreInternet'];console.log(element['scoreInternet'])});
+			res.data.forEach(element=>{note_sum+=element['scoreInternet']});
 			response.send({'moyenne_note':+note_sum/length})
 		})
 });
 
 function culture_sport_async(lat,long, r, nbresults){
-	console.log('ADDNOTE')
-	// executeStudentCrudOperations()
-
 	var url = 'https://data.culture.gouv.fr/api/records/1.0/search/?dataset=base-des-lieux-et-des-equipements-culturels&q=&rows='+nbresults+'&facet=type_equipement_ou_lieu&facet=label_et_appellation&facet=domaine&facet=sous_domaines&facet=departement&facet=adresse_postale&facet=nom&facet=coordonnees_gps_lat_lon&geofilter.distance='
 	
-    url = url+""+lat+'%2C'+""+long+'%2C'+"+"+r
-
+  url = url+""+lat+'%2C'+""+long+'%2C'+"+"+r
 	console.log("url: ",url);
 	var culture = axios
           .get(url)
           .then(res => {
-          	console.log('LENGTH')
-          	console.log(res.data['records'].length)
             let data = [];
             res.data['records'].forEach(element =>{
 				let temp_dic = {}
@@ -107,8 +99,7 @@ function culture_sport_async(lat,long, r, nbresults){
 
 	url = url+""+lat+'%2C'+""+long+'%2C'+"+"+r
 	console.log(url)
-
-	 var sport = axios
+	var sport = axios
 		.get(url)
 		.then(res => {
 			let data = [];
@@ -142,10 +133,7 @@ app.get('/culture_async/:long/:lat/:r', function(req, response){
 	
 	
 	var url = 'https://data.culture.gouv.fr/api/records/1.0/search/?dataset=base-des-lieux-et-des-equipements-culturels&q=&facet=type_equipement_ou_lieu&facet=label_et_appellation&facet=domaine&facet=sous_domaines&facet=departement&facet=adresse_postale&facet=nom&facet=coordonnees_gps_lat_lon&geofilter.distance='
-	
-
-    url = url+""+long+'%2C'+""+lat+'%2C'+"+"+r
-
+  url = url+""+long+'%2C'+""+lat+'%2C'+"+"+r
 	console.log("url: ",url);
 	axios
           .get(url)
