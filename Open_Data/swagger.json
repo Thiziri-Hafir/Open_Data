@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-      "version": "2.0", 
+      "version": "3.0.0", 
       "title": "Documentation de l'API : Localisation de monuments, lieux sportifs et culturels",
       "description": "Notre API permet aux utilsateurs de rechercher sur une carte, la localistion de monuments, de lieux sportifs et de lieux culturels et cela dans un rayon choisi. Il est possible de consulter les notes données par les utilisateurs et qui sont renvoyées par une autre API, comme il est possible de noter une recherche courante",
       "license": {
