@@ -9,7 +9,7 @@
         "url": "https://opensource.org/licenses/MIT"
       }
     },
-    "host": "https://opendatathiziri.osc-fr1.scalingo.io/home",
+    "host": "https://opendatathiziri.osc-fr1.scalingo.io/",
     "basePath": "/",
     "tags": [
       {
@@ -18,8 +18,8 @@
       }
     ],
     "schemes": ["http"],
-    "consumes": ["loc_ville.json", "https://data.culture.gouv.fr/api","https://equipements.sports.gouv.fr/api"],
-    "produces": ["datajson.json"],   
+    "consumes": ["loc_ville.json", "https://data.culture.gouv.fr/api","https://equipements.sports.gouv.fr/api","https://opendatamiashs.osc-fr1.scalingo.io/getAll"],
+    "produces": ["https://opendatathiziri.osc-fr1.scalingo.io/"],   
      
     "paths": {
       "/infos_from_ville/:ville/:r/:nbresults": {
@@ -60,6 +60,20 @@
               "description": "Requests API and gets several data about different sports clubs data",
               "schema": {
                 "$ref": "#/definitions/Sport"
+              }
+            }
+          }
+        }
+      },
+      "/other_group_data/:ville": {
+        "get": {
+          "tags": [" Get the data the other group's API https://opendatamiashs.osc-fr1.scalingo.io/getAll"],
+          "summary": "Get the note of the city",
+          "responses": {
+            "200": {
+              "description": "Requests API and gets a note about life in chosen city ",
+              "schema": {
+                "$ref": "#/definitions/Note"
               }
             }
           }
@@ -163,6 +177,18 @@
               },
               "lon":{
                 "type": "float"        
+              }
+            }
+          },
+
+          "Note": {
+            "required": ["scoreInternet"],
+            "properties": {
+              "scoreInternet": {
+                "type": "float",
+                 
+                 "exemple": 9.5,
+                "uniqueItems": true
               }
             }
           }
