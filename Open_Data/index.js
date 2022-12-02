@@ -6,8 +6,8 @@ import axios from 'axios';
 import express from 'express';
 import cors from 'cors';
 import { MongoClient } from 'mongodb'; 
-import * as swaggerUi from 'swagger-ui-express';
-import * as swaggerDocument from "./swagger.json" assert { type: 'json' };;
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from "./swagger.json" assert { type: 'json' };
 import bodyParser from "body-parser";
 
 const app = express();
@@ -153,7 +153,7 @@ app.get('/culture_async/:long/:lat/:r', function(req, response){
             let data = [];
             res.data['records'].forEach(element =>{
 				let temp_dic = {}
-				temp_dic['id'] = element['fields']['Code_Insee_EPCI'];
+				temp_dic['id'] = element['fields']['Code_Insee_EPCI'];note
 				temp_dic['nom'] = element['fields']['nom'];
 				temp_dic['type'] = element['fields']['type_equipement_ou_lieu']
 				temp_dic['label_et_appellation'] = element['fields']['label_et_appellation'];
