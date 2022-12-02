@@ -13,5 +13,8 @@
     "swagger-ui-express": "^4.5.0",
     "nouislider": "^1.0"
 
+  },
+  "scripts": {
+    "start": "node index.js"
   }
 }
