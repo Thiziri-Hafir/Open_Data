@@ -19,7 +19,7 @@
     ],
     "schemes": ["http"],
     "consumes": ["loc_ville.json", "https://data.culture.gouv.fr/api","https://equipements.sports.gouv.fr/api","https://opendatamiashs.osc-fr1.scalingo.io/getAll"],
-    "produces": ["https://opendatathiziri.osc-fr1.scalingo.io/"],   
+    "produces": ["https://opendatathiziri.osc-fr1.scalingo.io/api-docs "],   
      
     "paths": {
       "/infos_from_ville/:ville/:r/:nbresults": {
